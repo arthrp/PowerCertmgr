@@ -591,9 +591,9 @@ namespace MonoSecurityTools
 		[STAThread]
 		static void Main (string[] args)
 		{
-			string password = null;
-			bool verbose = false;
-			bool pem = false;
+            string password = null;
+            bool verbose = false;
+            bool pem = false;
             bool isMachineCertificateStore = false;
 
 			PrintVersion ();
@@ -644,7 +644,7 @@ namespace MonoSecurityTools
 					return;
 				}
 				if (type == ObjectType.CTL) {
-					Console.WriteLine ("CTL are not supported");
+					Console.WriteLine ("CTLs are not supported");
 					return;
 				}
 
