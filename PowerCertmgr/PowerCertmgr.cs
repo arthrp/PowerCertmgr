@@ -18,7 +18,6 @@ namespace MonoSecurityTools
 {
     public class PowerCertMgr
     {
-
         static private void PrintVersion () 
         {
             Console.WriteLine(Assembly.GetExecutingAssembly().GetName().Version);
@@ -51,6 +50,18 @@ namespace MonoSecurityTools
             Console.WriteLine ("\t-pem\t\tPut certificate in Base-64 encoded format (default DER encoded)");
             Console.WriteLine ("\t-?\t\th[elp]\tDisplay this help message");
             Console.WriteLine ();
+            Console.WriteLine("stores");
+            PrintStores();
+        }
+
+        static void PrintStores()
+        {
+            Console.WriteLine ("\tValid stores are: {0}, {1}, {2}, {3} and {4}",
+                X509Stores.Names.Personal,
+                X509Stores.Names.OtherPeople, 
+                X509Stores.Names.IntermediateCA, 
+                X509Stores.Names.TrustedRoot, 
+                X509Stores.Names.Untrusted);
         }
 
         static string GetCommand (string arg) 
@@ -465,10 +476,10 @@ namespace MonoSecurityTools
                 // start by the end (root) so we can stop adding them anytime afterward
                 for (int i = coll.Count - 1; i >= 0; i--) {
                     X509Certificate x509 = coll [i];
-                    bool selfsign = false;
+                    bool isSelfSigned = false;
                     bool failed = false;
                     try {
-                        selfsign = x509.IsSelfSigned;
+                        isSelfSigned = x509.IsSelfSigned;
                     }
                     catch {
                         // sadly it's hard to interpret old certificates with MD2
@@ -476,7 +487,7 @@ namespace MonoSecurityTools
                         failed = true;
                     }
 
-                    if (selfsign) {
+                    if (isSelfSigned) {
                         // this is a root
                         store = GetStoreFromName (X509Stores.Names.TrustedRoot, machine);
                     } else if (i == 0) {
@@ -489,7 +500,7 @@ namespace MonoSecurityTools
 
                     Console.WriteLine ("{0}{1}X.509 Certificate v{2}",     
                         Environment.NewLine,
-                        selfsign ? "Self-signed " : String.Empty,
+                        isSelfSigned ? "Self-signed " : String.Empty,
                         x509.Version);
                     Console.WriteLine ("   Issued from: {0}", x509.IssuerName);
                     Console.WriteLine ("   Issued to:   {0}", x509.SubjectName);
@@ -498,7 +509,7 @@ namespace MonoSecurityTools
 
                     if (!x509.IsCurrent)
                         Console.WriteLine ("   *** WARNING: Certificate isn't current ***");
-                    if ((i > 0) && !selfsign) {
+                    if ((i > 0) && !isSelfSigned) {
                         X509Certificate signer = coll [i-1];
                         bool signed = false;
                         try {
