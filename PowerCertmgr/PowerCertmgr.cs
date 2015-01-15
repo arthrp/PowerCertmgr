@@ -591,10 +591,10 @@ namespace MonoSecurityTools
 		[STAThread]
 		static void Main (string[] args)
 		{
-            string password = null;
-            bool verbose = false;
-            bool pem = false;
-            bool isMachineCertificateStore = false;
+			string password = null;
+			bool verbose = false;
+			bool pem = false;
+			bool isMachineCertificateStore = false;
 
 			PrintVersion ();
 
@@ -650,7 +650,7 @@ namespace MonoSecurityTools
 
 				storeName = args [currentArgArrIndex++];
 				store = GetStoreFromName (storeName, isMachineCertificateStore);
-                Console.WriteLine("Store:" + storeName);
+				Console.WriteLine("Store:" + storeName);
 				if (store == null) {
 					Console.WriteLine ("Invalid Store: {0}", storeName);
 					Console.WriteLine ("Valid stores are: {0}, {1}, {2}, {3} and {4}",
