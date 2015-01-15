@@ -100,13 +100,6 @@ namespace MonoSecurityTools
             return action;
         }
 
-        enum ObjectType {
-            None,
-            Certificate,
-            CRL,
-            CTL
-        }
-
         static ObjectType GetObjectType (string arg) 
         {
             ObjectType type = ObjectType.None;
