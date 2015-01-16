@@ -40,6 +40,7 @@
     <Compile Include="PowerCertmgr.cs" />
     <Compile Include="Action.cs" />
     <Compile Include="ObjectType.cs" />
+    <Compile Include="StringArrayExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

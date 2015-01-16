@@ -592,15 +592,7 @@ namespace MonoSecurityTools
             }
         }
 
-        static string GetArgumentByIndex(string[] argArr, int idx, string argDescription)
-        {
-            if(idx >= argArr.Length)
-                throw new ArgumentException("Error: "+argDescription + " wasn't specified");
-            return argArr[idx];
-        }
-
-        [STAThread]
-        static void Main (string[] args)
+        static void ProcessMain(string[] args)
         {
             string password = null;
             bool verbose = false;
@@ -609,19 +601,19 @@ namespace MonoSecurityTools
 
             PrintVersion ();
 
-            if (args.Length < 2) {
-                PrintHelp ();
-                return;
-            }
+            //            if (args.Length < 2) {
+            //                PrintHelp ();
+            //                return;
+            //            }
 
             Action action = GetAction (args [0]);
             ObjectType type = ObjectType.None;
 
             int currentArgArrIndex = 1;
             if (action != Action.Ssl) {
-                type = GetObjectType (args [currentArgArrIndex]);
+                type = GetObjectType (args.GetArgumentByIndex(currentArgArrIndex, "object type"));
 
-                Console.WriteLine("Type:" + type.ToString());
+                //Console.WriteLine("Type:" + type.ToString());
                 if (type != ObjectType.None)
                     currentArgArrIndex++;
             }
@@ -631,22 +623,22 @@ namespace MonoSecurityTools
             for (int i = currentArgArrIndex; i < args.Length; i++) {            
                 string command = GetCommand(args[i]);
                 switch (command) {
-                case "V":
-                    verbose = true;
-                    currentArgArrIndex++;
-                    break;
-                case "M":
-                    isMachineCertificateStore = true;
-                    currentArgArrIndex++;
-                    break;
-                case "P":
-                    password = args[++currentArgArrIndex];
-                    currentArgArrIndex++;
-                    break;
-                case "PEM":
-                    isPem = true;
-                    currentArgArrIndex++;
-                    break;
+                    case "V":
+                        verbose = true;
+                        currentArgArrIndex++;
+                        break;
+                    case "M":
+                        isMachineCertificateStore = true;
+                        currentArgArrIndex++;
+                        break;
+                    case "P":
+                        password = args[++currentArgArrIndex];
+                        currentArgArrIndex++;
+                        break;
+                    case "PEM":
+                        isPem = true;
+                        currentArgArrIndex++;
+                        break;
                 }
             }
 
@@ -677,34 +669,48 @@ namespace MonoSecurityTools
             // now action!
             try {
                 switch (action) {
-                case Action.Add:
-                    Add (type, store, file, password, verbose);
-                    break;
-                case Action.Delete:
-                    Delete (type, store, file, verbose);
-                    break;
-                case Action.Put:
-                    Put (type, store, file, isMachineCertificateStore, isPem, verbose);
-                    break;
-                case Action.List:
-                    List (type, store, isMachineCertificateStore, verbose);
-                    break;
-                case Action.Ssl:
-                    Ssl (file, isMachineCertificateStore, verbose);
-                    break;
-                case Action.ImportKey:
-                    ImportKey (type, isMachineCertificateStore, file, password, verbose);
-                    break;
-                default:
-                    throw new NotSupportedException (action.ToString ());
+                    case Action.Add:
+                        Add (type, store, file, password, verbose);
+                        break;
+                    case Action.Delete:
+                        Delete (type, store, file, verbose);
+                        break;
+                    case Action.Put:
+                        Put (type, store, file, isMachineCertificateStore, isPem, verbose);
+                        break;
+                    case Action.List:
+                        List (type, store, isMachineCertificateStore, verbose);
+                        break;
+                    case Action.Ssl:
+                        Ssl (file, isMachineCertificateStore, verbose);
+                        break;
+                    case Action.ImportKey:
+                        ImportKey (type, isMachineCertificateStore, file, password, verbose);
+                        break;
+                    default:
+                        throw new NotSupportedException (action.ToString ());
                 }
             }
-            catch (UnauthorizedAccessException uae) {
+            catch (UnauthorizedAccessException uae) 
+            {
                 Console.WriteLine ("Access to the {0} '{1}' certificate store has been denied.", 
                     (isMachineCertificateStore ? "machine" : "user"), storeName);
                 if (verbose) {
                     Console.WriteLine (uae);
                 }
+            }
+        }
+
+        [STAThread]
+        static void Main (string[] args)
+        {
+            try
+            {
+                ProcessMain(args);
+            }
+            catch(ArgumentException ae)
+            {
+                Console.WriteLine("Invalid arguments: " + ae.Message);
             }
         }
     }
