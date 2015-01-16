@@ -604,7 +604,7 @@ namespace MonoSecurityTools
         {
             string password = null;
             bool verbose = false;
-            bool pem = false;
+            bool isPem = false;
             bool isMachineCertificateStore = false;
 
             PrintVersion ();
@@ -644,7 +644,7 @@ namespace MonoSecurityTools
                     currentArgArrIndex++;
                     break;
                 case "PEM":
-                    pem = true;
+                    isPem = true;
                     currentArgArrIndex++;
                     break;
                 }
@@ -684,7 +684,7 @@ namespace MonoSecurityTools
                     Delete (type, store, file, verbose);
                     break;
                 case Action.Put:
-                    Put (type, store, file, isMachineCertificateStore, pem, verbose);
+                    Put (type, store, file, isMachineCertificateStore, isPem, verbose);
                     break;
                 case Action.List:
                     List (type, store, isMachineCertificateStore, verbose);
