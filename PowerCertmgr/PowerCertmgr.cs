@@ -20,7 +20,7 @@ namespace MonoSecurityTools
     {
         static private void PrintVersion () 
         {
-            Console.WriteLine(Assembly.GetExecutingAssembly().GetName().Version);
+            Console.WriteLine("v"+Assembly.GetExecutingAssembly().GetName().Version);
         }
 
         static private void PrintHelp () 
@@ -590,7 +590,14 @@ namespace MonoSecurityTools
             default:
                 throw new NotSupportedException (type.ToString ());
             }
-        }          
+        }
+
+        static string GetArgumentByIndex(string[] argArr, int idx, string argDescription)
+        {
+            if(idx >= argArr.Length)
+                throw new ArgumentException("Error: "+argDescription + " wasn't specified");
+            return argArr[idx];
+        }
 
         [STAThread]
         static void Main (string[] args)
@@ -619,8 +626,11 @@ namespace MonoSecurityTools
                     currentArgArrIndex++;
             }
 
-            for (int i = currentArgArrIndex; i < args.Length; i++) {
-                switch (GetCommand (args[i])) {
+            Console.WriteLine("curr:" + currentArgArrIndex + " " + args.Length);
+
+            for (int i = currentArgArrIndex; i < args.Length; i++) {            
+                string command = GetCommand(args[i]);
+                switch (command) {
                 case "V":
                     verbose = true;
                     currentArgArrIndex++;
@@ -657,12 +667,7 @@ namespace MonoSecurityTools
                 Console.WriteLine("Store:" + storeName);
                 if (store == null) {
                     Console.WriteLine ("Invalid Store: {0}", storeName);
-                    Console.WriteLine ("Valid stores are: {0}, {1}, {2}, {3} and {4}",
-                        X509Stores.Names.Personal,
-                        X509Stores.Names.OtherPeople, 
-                        X509Stores.Names.IntermediateCA, 
-                        X509Stores.Names.TrustedRoot, 
-                        X509Stores.Names.Untrusted);
+                    PrintStores();
                     return;
                 }
             }
