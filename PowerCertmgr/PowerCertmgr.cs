@@ -20,7 +20,7 @@ namespace MonoSecurityTools
     {
         static private void PrintVersion () 
         {
-            Console.WriteLine("v"+Assembly.GetExecutingAssembly().GetName().Version);
+            Console.WriteLine("version "+Assembly.GetExecutingAssembly().GetName().Version);
         }
 
         static private void PrintHelp () 
@@ -601,10 +601,10 @@ namespace MonoSecurityTools
 
             PrintVersion ();
 
-            //            if (args.Length < 2) {
-            //                PrintHelp ();
-            //                return;
-            //            }
+            if (args.Length < 2) {
+                PrintHelp ();
+                return;
+            }
 
             Action action = GetAction (args [0]);
             ObjectType type = ObjectType.None;
@@ -621,7 +621,7 @@ namespace MonoSecurityTools
             Console.WriteLine("curr:" + currentArgArrIndex + " " + args.Length);
 
             for (int i = currentArgArrIndex; i < args.Length; i++) {            
-                string command = GetCommand(args[i]);
+                string command = GetCommand(args.GetArgumentByIndex(i, "command"));
                 switch (command) {
                     case "V":
                         verbose = true;
@@ -632,7 +632,7 @@ namespace MonoSecurityTools
                         currentArgArrIndex++;
                         break;
                     case "P":
-                        password = args[++currentArgArrIndex];
+                        password = args.GetArgumentByIndex(currentArgArrIndex++, "password");
                         currentArgArrIndex++;
                         break;
                     case "PEM":
@@ -664,7 +664,7 @@ namespace MonoSecurityTools
                 }
             }
 
-            string file = (currentArgArrIndex < args.Length) ? args [currentArgArrIndex] : null;
+            string file = (currentArgArrIndex < args.Length) ? args[currentArgArrIndex] : null;
 
             // now action!
             try {
