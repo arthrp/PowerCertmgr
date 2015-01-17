@@ -1,5 +1,7 @@
 # PowerCertmgr
 
+[![Build Status](https://travis-ci.org/arthur-peka/PowerCertmgr.svg?branch=master)](https://travis-ci.org/arthur-peka/PowerCertmgr)
+
 A fork of **certmgr** utility from Mono tools. Allows user to manage certificates on a particular machine.
 See [man page](http://linux.die.net/man/1/certmgr) for more details of the original utility.
 
