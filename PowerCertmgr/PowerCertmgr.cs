@@ -618,7 +618,7 @@ namespace MonoSecurityTools
                     currentArgArrIndex++;
             }
 
-            Console.WriteLine("curr:" + currentArgArrIndex + " " + args.Length);
+            //Console.WriteLine("curr:" + currentArgArrIndex + " " + args.Length);
 
             for (int i = currentArgArrIndex; i < args.Length; i++) {            
                 string command = GetCommand(args.GetArgumentByIndex(i, "command"));
@@ -654,7 +654,7 @@ namespace MonoSecurityTools
                     return;
                 }
 
-                storeName = args [currentArgArrIndex++];
+                storeName = args.GetArgumentByIndex(currentArgArrIndex++, "store name");
                 store = GetStoreFromName (storeName, isMachineCertificateStore);
                 Console.WriteLine("Store:" + storeName);
                 if (store == null) {
