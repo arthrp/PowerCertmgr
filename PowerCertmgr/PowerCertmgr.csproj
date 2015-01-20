@@ -47,6 +47,7 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   
   <Target Name='AfterBuild'>
-	  <Exec Command="mkbundle bin/$(Configuration)/PowerCertmgr.exe -o power-certmgr; exit 0" IgnoreExitCode="true" />
+  <Exec Command="mkbundle bin/$(Configuration)/PowerCertmgr.exe -o power-certmgr; exit 0" 
+        IgnoreExitCode="true" Condition="'$(OS)' == 'Unix'" />
   </Target>
 </Project>
