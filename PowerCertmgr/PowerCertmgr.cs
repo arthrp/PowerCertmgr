@@ -511,18 +511,18 @@ namespace MonoSecurityTools
                         Console.WriteLine ("   *** WARNING: Certificate isn't current ***");
                     if ((i > 0) && !isSelfSigned) {
                         X509Certificate signer = coll [i-1];
-                        bool signed = false;
+                        bool isSigned = false;
                         try {
                             if (signer.RSA != null) {
-                                signed = x509.VerifySignature (signer.RSA);
+                                isSigned = x509.VerifySignature (signer.RSA);
                             } else if (signer.DSA != null) {
-                                signed = x509.VerifySignature (signer.DSA);
+                                isSigned = x509.VerifySignature (signer.DSA);
                             } else {
                                 Console.WriteLine ("   *** WARNING: Couldn't not find who signed this certificate ***");
-                                signed = true; // skip next warning
+                                isSigned = true; // skip next warning
                             }
 
-                            if (!signed)
+                            if (!isSigned)
                                 Console.WriteLine ("   *** WARNING: Certificate signature is INVALID ***");
                         }
                         catch {
