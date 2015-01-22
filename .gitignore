@@ -184,3 +184,6 @@ FakesAssemblies/
 
 #Userprefs
 *.userprefs
+
+#Standalone binary
+power-certmgr
