@@ -315,7 +315,7 @@ namespace MonoSecurityTools
             }
         }
 
-        static void Put (ObjectType type, X509Store store, string file, bool machine, bool pem, bool verbose) 
+        static void Put (ObjectType type, X509Store store, string file, bool isMachineCertificateStore, bool pem, bool verbose) 
         {
             if (String.IsNullOrEmpty (file)) {
                 Console.Error.WriteLine("error: no filename provided to put the certificate.");
@@ -327,7 +327,7 @@ namespace MonoSecurityTools
             case ObjectType.Certificate:
                 for(int i = 0; i < store.Certificates.Count; i++) {
                     Console.WriteLine ("==============Certificate # {0} ==========", i + 1);
-                    DisplayCertificate (store.Certificates[i], machine, verbose);
+                    DisplayCertificate (store.Certificates[i], isMachineCertificateStore, verbose);
                 }
                 int selection;
                 Console.Write("Enter cert # from the above list to put-->");
@@ -470,12 +470,12 @@ namespace MonoSecurityTools
             }
             int n=0;
 
-            X509CertificateCollection coll = GetCertificatesFromSslSession (host);
-            if (coll != null) {
+            X509CertificateCollection sessionCertificates = GetCertificatesFromSslSession (host);
+            if (sessionCertificates != null) {
                 X509Store store = null;
                 // start by the end (root) so we can stop adding them anytime afterward
-                for (int i = coll.Count - 1; i >= 0; i--) {
-                    X509Certificate x509 = coll [i];
+                for (int i = sessionCertificates.Count - 1; i >= 0; i--) {
+                    X509Certificate x509 = sessionCertificates [i];
                     bool isSelfSigned = false;
                     bool failed = false;
                     try {
@@ -510,7 +510,7 @@ namespace MonoSecurityTools
                     if (!x509.IsCurrent)
                         Console.WriteLine ("   *** WARNING: Certificate isn't current ***");
                     if ((i > 0) && !isSelfSigned) {
-                        X509Certificate signer = coll [i-1];
+                        X509Certificate signer = sessionCertificates [i-1];
                         bool isSigned = false;
                         try {
                             if (signer.RSA != null) {
