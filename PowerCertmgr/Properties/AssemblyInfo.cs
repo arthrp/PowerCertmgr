@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration ("")]
 [assembly: AssemblyCompany ("")]
 [assembly: AssemblyProduct ("")]
-[assembly: AssemblyCopyright ("permafrost")]
+[assembly: AssemblyCopyright ("Arthur Peka")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
 
