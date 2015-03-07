@@ -18,6 +18,8 @@ namespace MonoSecurityTools
 {
     public class PowerCertMgr
     {
+        private const string APP_NAME = "power-certmgr";
+
         static private void PrintVersion () 
         {
             Console.WriteLine("version "+Assembly.GetExecutingAssembly().GetName().Version);
@@ -25,12 +27,12 @@ namespace MonoSecurityTools
 
         static private void PrintHelp () 
         {
-            Console.WriteLine ("Usage: certmgr [action] [object-type] [options] store [filename]");
-            Console.WriteLine ("   or: certmgr -list object-type [options] store");
-            Console.WriteLine ("   or: certmgr -del object-type [options] store certhash");
-            Console.WriteLine ("   or: certmgr -ssl [options] url");
-            Console.WriteLine ("   or: certmgr -put object-type [options] store certfile");
-            Console.WriteLine ("   or: certmgr -importKey [options] store pkcs12file");
+            Console.WriteLine ("Usage: "+APP_NAME+" [action] [object-type] [options] store [filename]");
+            Console.WriteLine ("   or: "+APP_NAME+" -list object-type [options] store");
+            Console.WriteLine ("   or: "+APP_NAME+" -del object-type [options] store certhash");
+            Console.WriteLine ("   or: "+APP_NAME+" -ssl [options] url");
+            Console.WriteLine ("   or: "+APP_NAME+" -put object-type [options] store certfile");
+            Console.WriteLine ("   or: "+APP_NAME+" -importKey [options] store pkcs12file");
             Console.WriteLine ();
             Console.WriteLine ("actions");
             Console.WriteLine ("\t-add\t\tAdd a certificate, CRL or CTL to specified store");
@@ -40,9 +42,9 @@ namespace MonoSecurityTools
             Console.WriteLine ("\t-ssl\t\tDownload and add certificates from an SSL session");
             Console.WriteLine ("\t-importKey\tImport PKCS12 privateKey to keypair store.");
             Console.WriteLine ("object types");
-            Console.WriteLine ("\t-c\t\tadd/del/put certificates");
-            Console.WriteLine ("\t-crl\t\tadd/del/put certificate revocation lists");
-            Console.WriteLine ("\t-ctl\t\tadd/del/put certificate trust lists [unsupported]");
+            Console.WriteLine ("\t-c\t\tcertificate");
+            Console.WriteLine ("\t-crl\t\t Certificate Revocation List");
+            Console.WriteLine ("\t-ctl\t\t Certificate Trust List [unsupported]");
             Console.WriteLine ("other options");
             Console.WriteLine ("\t-m\t\tuse the machine certificate store (default to user)");
             Console.WriteLine ("\t-v\t\tverbose mode (display status for every steps)");
@@ -161,7 +163,7 @@ namespace MonoSecurityTools
             return Convert.FromBase64String (base64);
         }
 
-        static byte[] ToPEM (string type, byte[] data)
+        static byte[] ToPem (string type, byte[] data)
         {
             string header = String.Format ("-----BEGIN {0}-----", type);
             string footer = String.Format ("-----END {0}-----", type);
@@ -315,7 +317,7 @@ namespace MonoSecurityTools
             }
         }
 
-        static void Put (ObjectType type, X509Store store, string file, bool isMachineCertificateStore, bool pem, bool verbose) 
+        static void Put (ObjectType type, X509Store store, string file, bool isMachineCertificateStore, bool pem, bool beVerbose) 
         {
             if (String.IsNullOrEmpty (file)) {
                 Console.Error.WriteLine("error: no filename provided to put the certificate.");
@@ -327,7 +329,7 @@ namespace MonoSecurityTools
             case ObjectType.Certificate:
                 for(int i = 0; i < store.Certificates.Count; i++) {
                     Console.WriteLine ("==============Certificate # {0} ==========", i + 1);
-                    DisplayCertificate (store.Certificates[i], isMachineCertificateStore, verbose);
+                    DisplayCertificate (store.Certificates[i], isMachineCertificateStore, beVerbose);
                 }
                 int selection;
                 Console.Write("Enter cert # from the above list to put-->");
@@ -339,7 +341,7 @@ namespace MonoSecurityTools
                 SSCX.X509Certificate2 cert = new SSCX.X509Certificate2 (store.Certificates[selection-1].RawData);
                 byte[] data = null;
                 if(pem) {
-                    data = ToPEM ("CERTIFICATE", cert.Export (SSCX.X509ContentType.Cert));
+                    data = ToPem ("CERTIFICATE", cert.Export (SSCX.X509ContentType.Cert));
                 } else {
                     data = cert.Export (SSCX.X509ContentType.Cert);
                 }
@@ -579,7 +581,7 @@ namespace MonoSecurityTools
                     CspParameters csp = new CspParameters ();
                     csp.KeyContainerName = CryptoConvert.ToHex (x509.Hash);
                     csp.Flags = machine ? CspProviderFlags.UseMachineKeyStore : 0;
-                    RSACryptoServiceProvider rsa = new RSACryptoServiceProvider (csp);
+                    var rsa = new RSACryptoServiceProvider (csp);
                     rsa.ImportParameters (pk.ExportParameters (true));
                     rsa.PersistKeyInCsp = true;
                     count++;
