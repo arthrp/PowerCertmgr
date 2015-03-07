@@ -43,13 +43,13 @@ namespace MonoSecurityTools
             Console.WriteLine ("\t-importKey\tImport PKCS12 privateKey to keypair store.");
             Console.WriteLine ("object types");
             Console.WriteLine ("\t-c\t\tcertificate");
-            Console.WriteLine ("\t-crl\t\t Certificate Revocation List");
-            Console.WriteLine ("\t-ctl\t\t Certificate Trust List [unsupported]");
+            Console.WriteLine ("\t-crl\t\tCertificate Revocation List (CRL)");
+            Console.WriteLine ("\t-ctl\t\tCertificate Trust List (CTL) [unsupported]");
             Console.WriteLine ("other options");
             Console.WriteLine ("\t-m\t\tuse the machine certificate store (default to user)");
             Console.WriteLine ("\t-v\t\tverbose mode (display status for every steps)");
             Console.WriteLine ("\t-p [password]\tPassword used to decrypt PKCS12");
-            Console.WriteLine ("\t-pem\t\tPut certificate in Base-64 encoded format (default DER encoded)");
+            Console.WriteLine ("\t-pem\t\tPut certificate in Base-64 encoded format (default is DER encoded)");
             Console.WriteLine ("\t-?\t\th[elp]\tDisplay this help message");
             Console.WriteLine ();
             Console.WriteLine("stores");
