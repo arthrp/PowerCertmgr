@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net;
@@ -19,6 +20,14 @@ namespace MonoSecurityTools
     public class PowerCertMgr
     {
         private const string APP_NAME = "power-certmgr";
+
+        private static List<X509Store> DefaultCertificateStores = new List<X509Store>() 
+        {
+                X509StoreManager.CurrentUser.TrustedRoot,
+                X509StoreManager.CurrentUser.Personal,
+                X509StoreManager.CurrentUser.IntermediateCA,
+                X509StoreManager.CurrentUser.OtherPeople
+        };
 
         static private void PrintVersion () 
         {
@@ -410,8 +419,13 @@ namespace MonoSecurityTools
         {
             switch (type) {
             case ObjectType.Certificate:
-                foreach (X509Certificate x509 in store.Certificates) {
-                    DisplayCertificate (x509, machine, verbose);
+                var stores = (store == null) ? DefaultCertificateStores : new List<X509Store>() { store };
+                foreach (X509Store listedStore in stores)
+                {
+                    foreach (X509Certificate x509 in listedStore.Certificates)
+                    {
+                        DisplayCertificate(x509, machine, verbose);
+                    }
                 }
                 break;
             case ObjectType.CRL:
@@ -656,10 +670,11 @@ namespace MonoSecurityTools
                     return;
                 }
 
-                storeName = args.GetArgumentByIndex(currentArgArrIndex++, "store name");
+                bool isStoreNameOptional = (action == Action.List);
+                storeName = args.GetArgumentByIndex(currentArgArrIndex++, "store name", isStoreNameOptional);
                 store = GetStoreFromName (storeName, isMachineCertificateStore);
-                Console.WriteLine("Store:" + storeName);
-                if (store == null) {
+                Console.WriteLine("Store:" + ((storeName != null) ? storeName : "all"));
+                if (store == null && !isStoreNameOptional) {
                     Console.WriteLine ("Invalid Store: {0}", storeName);
                     PrintStores();
                     return;
