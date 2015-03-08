@@ -36,32 +36,32 @@ namespace MonoSecurityTools
 
         static private void PrintHelp () 
         {
-            Console.WriteLine ("Usage: "+APP_NAME+" [action] [object-type] [options] store [filename]");
+            Console.WriteLine ("Usage: "+APP_NAME+" <action> [object-type] [options] store [filename]");
             Console.WriteLine ("   or: "+APP_NAME+" -list object-type [options] store");
             Console.WriteLine ("   or: "+APP_NAME+" -del object-type [options] store certhash");
             Console.WriteLine ("   or: "+APP_NAME+" -ssl [options] url");
             Console.WriteLine ("   or: "+APP_NAME+" -put object-type [options] store certfile");
             Console.WriteLine ("   or: "+APP_NAME+" -importKey [options] store pkcs12file");
             Console.WriteLine ();
-            Console.WriteLine ("actions");
+            Console.WriteLine ("actions:");
             Console.WriteLine ("\t-add\t\tAdd a certificate, CRL or CTL to specified store");
             Console.WriteLine ("\t-del\t\tRemove a certificate, CRL or CTL to specified store");
             Console.WriteLine ("\t-put\t\tCopy a certificate, CRL or CTL from a store to a file");
             Console.WriteLine ("\t-list\t\tList certificates, CRL or CTL in the specified store.");
             Console.WriteLine ("\t-ssl\t\tDownload and add certificates from an SSL session");
             Console.WriteLine ("\t-importKey\tImport PKCS12 privateKey to keypair store.");
-            Console.WriteLine ("object types");
+            Console.WriteLine ("object types:");
             Console.WriteLine ("\t-c\t\tcertificate");
             Console.WriteLine ("\t-crl\t\tCertificate Revocation List (CRL)");
             Console.WriteLine ("\t-ctl\t\tCertificate Trust List (CTL) [unsupported]");
-            Console.WriteLine ("other options");
+            Console.WriteLine ("other options:");
             Console.WriteLine ("\t-m\t\tuse the machine certificate store (default to user)");
             Console.WriteLine ("\t-v\t\tverbose mode (display status for every steps)");
             Console.WriteLine ("\t-p [password]\tPassword used to decrypt PKCS12");
             Console.WriteLine ("\t-pem\t\tPut certificate in Base-64 encoded format (default is DER encoded)");
             Console.WriteLine ("\t-?\t\th[elp]\tDisplay this help message");
             Console.WriteLine ();
-            Console.WriteLine("stores");
+            Console.WriteLine("stores:");
             PrintStores();
         }
 
@@ -673,7 +673,8 @@ namespace MonoSecurityTools
                 bool isStoreNameOptional = (action == Action.List);
                 storeName = args.GetArgumentByIndex(currentArgArrIndex++, "store name", isStoreNameOptional);
                 store = GetStoreFromName (storeName, isMachineCertificateStore);
-                Console.WriteLine("Store:" + ((storeName != null) ? storeName : "all"));
+                Console.WriteLine("Store(s):" + ((storeName != null) ? storeName : 
+                    "all (except untrusted)"));
                 if (store == null && !isStoreNameOptional) {
                     Console.WriteLine ("Invalid Store: {0}", storeName);
                     PrintStores();
