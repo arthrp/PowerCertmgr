@@ -3,7 +3,7 @@ using NUnit.Framework;
 using System.IO;
 using MonoSecurityTools;
 
-namespace PowerCertmgr.Test
+namespace PowerCertmgr.Tests
 {
     [TestFixture]
     public class BaseTests

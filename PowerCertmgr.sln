@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerCertmgr", "PowerCertmgr\PowerCertmgr.csproj", "{79C0AB6E-E9F2-4863-ADE9-392F2DFEE79B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerCertmgr.Tests", "PowerCertmgr.Test\PowerCertmgr.Tests.csproj", "{A98B6A17-BED0-4E93-865D-40F3C5FA379F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerCertmgr.Tests", "PowerCertmgr.Tests\PowerCertmgr.Tests.csproj", "{C92F291B-0A6B-4770-AD28-B3FDCA22E9B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +15,10 @@ Global
 		{79C0AB6E-E9F2-4863-ADE9-392F2DFEE79B}.Debug|x86.Build.0 = Debug|x86
 		{79C0AB6E-E9F2-4863-ADE9-392F2DFEE79B}.Release|x86.ActiveCfg = Release|x86
 		{79C0AB6E-E9F2-4863-ADE9-392F2DFEE79B}.Release|x86.Build.0 = Release|x86
-		{A98B6A17-BED0-4E93-865D-40F3C5FA379F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{A98B6A17-BED0-4E93-865D-40F3C5FA379F}.Debug|x86.Build.0 = Debug|Any CPU
-		{A98B6A17-BED0-4E93-865D-40F3C5FA379F}.Release|x86.ActiveCfg = Release|Any CPU
-		{A98B6A17-BED0-4E93-865D-40F3C5FA379F}.Release|x86.Build.0 = Release|Any CPU
+		{C92F291B-0A6B-4770-AD28-B3FDCA22E9B8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C92F291B-0A6B-4770-AD28-B3FDCA22E9B8}.Debug|x86.Build.0 = Debug|Any CPU
+		{C92F291B-0A6B-4770-AD28-B3FDCA22E9B8}.Release|x86.ActiveCfg = Release|Any CPU
+		{C92F291B-0A6B-4770-AD28-B3FDCA22E9B8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
