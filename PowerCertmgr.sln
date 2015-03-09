@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerCertmgr", "PowerCertmgr\PowerCertmgr.csproj", "{79C0AB6E-E9F2-4863-ADE9-392F2DFEE79B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerCertmgr.Test", "PowerCertmgr.Test\PowerCertmgr.Test.csproj", "{A98B6A17-BED0-4E93-865D-40F3C5FA379F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerCertmgr.Tests", "PowerCertmgr.Test\PowerCertmgr.Tests.csproj", "{A98B6A17-BED0-4E93-865D-40F3C5FA379F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,7 +21,6 @@ Global
 		{A98B6A17-BED0-4E93-865D-40F3C5FA379F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = PowerCertmgr\PowerCertmgr.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1
 		$1.inheritsSet = VisualStudio
