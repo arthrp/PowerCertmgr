@@ -13,6 +13,10 @@ there is quite long. So, inspired by new .NET modular structure, I created this 
 
 Currently it's the original code, fixed to run in standalone with minor fixes (e.g. variables renaming).
 
+### Compatibility
+
+Should be compatible with Mono 3.10 and later. CI seems to use the latest stable Mono.
+
 ### Backporting
 
 When I have time, I will try to import the improvements/fixes back to original distributed with Mono (if the maintainers accept, hehe).
