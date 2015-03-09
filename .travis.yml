@@ -1,2 +1,6 @@
 language: csharp
 solution: PowerCertmgr.sln
+before_install:
+  - sudo apt-get install nunit-console
+after_script:
+  - nunit-console Tests/bin/Release/PowerCertmgr.Test.dll
