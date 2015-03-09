@@ -623,14 +623,14 @@ namespace MonoSecurityTools
             }
 
             Action action = GetAction (args [0]);
-            ObjectType type = ObjectType.None;
+            ObjectType objectType = ObjectType.None;
 
             int currentArgArrIndex = 1;
             if (action != Action.Ssl) {
-                type = GetObjectType (args.GetArgumentByIndex(currentArgArrIndex, "object type"));
+                objectType = GetObjectType (args.GetArgumentByIndex(currentArgArrIndex, "object type"));
 
                 //Console.WriteLine("Type:" + type.ToString());
-                if (type != ObjectType.None)
+                if (objectType != ObjectType.None)
                     currentArgArrIndex++;
             }
 
@@ -661,11 +661,11 @@ namespace MonoSecurityTools
             X509Store store = null;
             string storeName = null;
             if (action != Action.Ssl) {
-                if ((action == Action.None) || (type == ObjectType.None)) {
+                if ((action == Action.None) || (objectType == ObjectType.None)) {
                     PrintHelp ();
                     return;
                 }
-                if (type == ObjectType.CTL) {
+                if (objectType == ObjectType.CTL) {
                     Console.WriteLine ("CTLs are not supported");
                     return;
                 }
@@ -688,22 +688,22 @@ namespace MonoSecurityTools
             try {
                 switch (action) {
                     case Action.Add:
-                        Add (type, store, file, password, verbose);
+                        Add (objectType, store, file, password, verbose);
                         break;
                     case Action.Delete:
-                        Delete (type, store, file, verbose);
+                        Delete (objectType, store, file, verbose);
                         break;
                     case Action.Put:
-                        Put (type, store, file, isMachineCertificateStore, isPem, verbose);
+                        Put (objectType, store, file, isMachineCertificateStore, isPem, verbose);
                         break;
                     case Action.List:
-                        List (type, store, isMachineCertificateStore, verbose);
+                        List (objectType, store, isMachineCertificateStore, verbose);
                         break;
                     case Action.Ssl:
                         Ssl (file, isMachineCertificateStore, verbose);
                         break;
                     case Action.ImportKey:
-                        ImportKey (type, isMachineCertificateStore, file, password, verbose);
+                        ImportKey (objectType, isMachineCertificateStore, file, password, verbose);
                         break;
                     default:
                         throw new NotSupportedException (action.ToString ());
