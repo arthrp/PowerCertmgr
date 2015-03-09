@@ -720,7 +720,7 @@ namespace MonoSecurityTools
         }
 
         [STAThread]
-        static void Main (string[] args)
+        public static void Main (string[] args)
         {
             try
             {
