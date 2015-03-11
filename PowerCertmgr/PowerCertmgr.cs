@@ -21,6 +21,9 @@ namespace MonoSecurityTools
     {
         private const string APP_NAME = "power-certmgr";
 
+        /// <summary>
+        /// The default certificate stores are all except Untrusted
+        /// </summary>
         private static List<X509Store> DefaultCertificateStores = new List<X509Store>() 
         {
                 X509StoreManager.CurrentUser.TrustedRoot,
@@ -554,7 +557,7 @@ namespace MonoSecurityTools
                     if (store.Certificates.Contains (x509)) {
                         Console.WriteLine ("This certificate is already in the {0} store.", store.Name);
                     } else {
-                        Console.Write ("Import this certificate into the {0} store ?", store.Name);
+                        Console.Write ("Import this certificate into the {0} store (Y/N)?", store.Name);
                         string answer = Console.ReadLine ().ToUpper ();
                         if ((answer == "YES") || (answer == "Y")) {
                             store.Import (x509);
