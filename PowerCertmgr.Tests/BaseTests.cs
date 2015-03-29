@@ -9,7 +9,7 @@ namespace PowerCertmgr.Tests
     public class BaseTests
     {
         [Test]
-        public void Test_CalledWithZeroArgsShouldPrintUsage()
+        public void CalledWithZeroArgsShouldPrintUsage()
         {
             using (StringWriter sw = new StringWriter())
             {
@@ -18,6 +18,18 @@ namespace PowerCertmgr.Tests
                 PowerCertMgr.Main(new string[]{ });
 
                 Assert.True(sw.ToString().Contains("Usage"));
+            }
+        }
+
+        [Test]
+        public void PrintsHelpProperly()
+        {
+            using (StringWriter sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+
+                PowerCertMgr.Main(new string[]{ "--help" });
+                Assert.True(sw.ToString().Contains("Usage:"));
             }
         }
     }
