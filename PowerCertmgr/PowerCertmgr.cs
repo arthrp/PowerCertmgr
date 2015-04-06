@@ -482,7 +482,7 @@ namespace MonoSecurityTools
             // OTOH we ask user confirmation before adding certificates into the stores
         }
 
-        static void Ssl (string host, bool machine, bool verbose) 
+        static void AddCertificatesFromSslSession (string host, bool machine, bool verbose) 
         {
             if (verbose) {
                 Console.WriteLine ("Importing certificates from '{0}' into the {1} stores.",
@@ -704,7 +704,7 @@ namespace MonoSecurityTools
                         List (objectType, store, isMachineCertificateStore, verbose);
                         break;
                     case Action.Ssl:
-                        Ssl (file, isMachineCertificateStore, verbose);
+                        AddCertificatesFromSslSession (file, isMachineCertificateStore, verbose);
                         break;
                     case Action.ImportKey:
                         ImportKey (objectType, isMachineCertificateStore, file, password, verbose);
