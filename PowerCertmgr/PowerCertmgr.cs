@@ -225,7 +225,7 @@ namespace MonoSecurityTools
                 break;
             case ".P12":
             case ".PFX":
-                PKCS12 p12 = password == null ? PKCS12.LoadFromFile (filename)
+                PKCS12 p12 = (password == null) ? PKCS12.LoadFromFile (filename)
                     : PKCS12.LoadFromFile (filename, password);
                 X509CertificateCollection tmp = new X509CertificateCollection (p12.Certificates);
 
@@ -264,7 +264,8 @@ namespace MonoSecurityTools
                 spc = null;
                 break;
             case ".CRL":
-                using (FileStream fs = File.OpenRead (filename)) {
+                using (FileStream fs = File.OpenRead (filename)) 
+                {
                     byte[] data = new byte [fs.Length];
                     fs.Read (data, 0, data.Length);
                     crl = new X509Crl (data);
@@ -303,7 +304,7 @@ namespace MonoSecurityTools
             }
         }
 
-        static void Delete (ObjectType type, X509Store store, string hash, bool verbose) 
+        static void Delete (ObjectType type, X509Store store, string hash) 
         {
             switch (type) {
             case ObjectType.Certificate:
@@ -694,7 +695,7 @@ namespace MonoSecurityTools
                         Add (objectType, store, file, password, verbose);
                         break;
                     case Action.Delete:
-                        Delete (objectType, store, file, verbose);
+                        Delete (objectType, store, file);
                         break;
                     case Action.Put:
                         Put (objectType, store, file, isMachineCertificateStore, isPem, verbose);
