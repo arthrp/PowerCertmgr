@@ -164,7 +164,7 @@ namespace MonoSecurityTools
             return store;
         }
 
-        static byte[] PEM (string type, byte[] data) 
+        static byte[] GetPem (string type, byte[] data) 
         {
             string pem = Encoding.ASCII.GetString (data);
             string header = String.Format ("-----BEGIN {0}-----", type);
@@ -215,7 +215,7 @@ namespace MonoSecurityTools
                     fs.Read (data, 0, data.Length);
                     if (data [0] != 0x30) {
                         // maybe it's ASCII PEM base64 encoded ?
-                        data = PEM ("CERTIFICATE", data);
+                        data = GetPem ("CERTIFICATE", data);
                     }
                     if (data != null)
                         x509 = new X509Certificate (data);
@@ -532,6 +532,8 @@ namespace MonoSecurityTools
                     if ((i > 0) && !isSelfSigned) {
                         X509Certificate signer = sessionCertificates [i-1];
                         bool isSigned = false;
+
+                        Console.WriteLine("Signature algorithm: " + CryptoHelper.HashAlgNameFromOid(x509.SignatureAlgorithm));
                         try {
                             if (signer.RSA != null) {
                                 isSigned = x509.VerifySignature (signer.RSA);

@@ -41,6 +41,7 @@
     <Compile Include="Action.cs" />
     <Compile Include="ObjectType.cs" />
     <Compile Include="StringArrayExtensions.cs" />
+    <Compile Include="CryptoHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
