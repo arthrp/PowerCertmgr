@@ -749,7 +749,11 @@ namespace MonoSecurityTools
             }
             catch(SocketException s)
             {
-                Console.Write("Network error: " + s.Message + "\n");
+                Console.WriteLine("Network error: " + s.Message);
+            }
+            catch(UriFormatException)
+            {
+                Console.WriteLine("Error: Invalid url");
             }
         }
     }
