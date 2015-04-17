@@ -747,6 +747,10 @@ namespace MonoSecurityTools
             {
                 Console.WriteLine("Invalid arguments: " + ae.Message);
             }
+            catch(SocketException s)
+            {
+                Console.Write("Network error: " + s.Message + "\n");
+            }
         }
     }
 }
