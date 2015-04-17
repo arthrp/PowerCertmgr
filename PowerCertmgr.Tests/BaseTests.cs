@@ -59,6 +59,14 @@ namespace PowerCertmgr.Tests
                 PowerCertMgr.Main(new string[]{ "-add", "-crap" });
                 Assert.True(sw.ToString().Contains("Usage:"));
             }
+
+            using (StringWriter sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+
+                PowerCertMgr.Main(new string[]{ "-add", "-c", "My" });
+                Assert.True(sw.ToString().Contains("Invalid arguments: Path to Certificate wasn't specified"));
+            }
         }
     }
 }
