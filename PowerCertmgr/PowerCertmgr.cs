@@ -451,7 +451,7 @@ namespace MonoSecurityTools
             socket.Connect (new IPEndPoint (ip, uri.Port));
             NetworkStream ns = new NetworkStream (socket, false);
             SslClientStream ssl = new SslClientStream (ns, uri.Host, false, Mono.Security.Protocol.Tls.SecurityProtocolType.Default, null);
-            ssl.ServerCertValidationDelegate += new CertificateValidationCallback (CertificateValidation);
+            //ssl.ServerCertValidationDelegate += new CertificateValidationCallback (CertificateValidation);
 
             try {
                 // we don't really want to write to the server (as we don't know
@@ -488,101 +488,112 @@ namespace MonoSecurityTools
                 Console.WriteLine ("Importing certificates from '{0}' into the {1} stores.",
                     host, machine ? "machine" : "user");
             }
-            int n=0;
+            int addedCertificatesCount = 0;
 
             X509CertificateCollection sessionCertificates = GetCertificatesFromSslSession (host);
+
             if (sessionCertificates != null) {
-                X509Store store = null;
                 // start by the end (root) so we can stop adding them anytime afterward
                 for (int i = sessionCertificates.Count - 1; i >= 0; i--) {
-                    X509Certificate x509 = sessionCertificates [i];
-                    bool isSelfSigned = false;
-                    bool failed = false;
-                    try {
-                        isSelfSigned = x509.IsSelfSigned;
-                    }
-                    catch {
-                        // sadly it's hard to interpret old certificates with MD2
-                        // without manually changing the machine.config file
-                        failed = true;
-                    }
+                    var prevCert = (i > 0) ? sessionCertificates[i - 1] : null;
 
-                    if (isSelfSigned) {
-                        // this is a root
-                        store = GetStoreFromName (X509Stores.Names.TrustedRoot, machine);
-                    } else if (i == 0) {
-                        // server certificate isn't (generally) an intermediate CA
-                        store = GetStoreFromName (X509Stores.Names.OtherPeople, machine);
-                    } else {
-                        // all other certificates should be intermediate CA
-                        store = GetStoreFromName (X509Stores.Names.IntermediateCA, machine);
-                    }
-
-                    Console.WriteLine ("{0}{1}X.509 Certificate v{2}",     
-                        Environment.NewLine,
-                        isSelfSigned ? "Self-signed " : String.Empty,
-                        x509.Version);
-                    Console.WriteLine ("   Issued from: {0}", x509.IssuerName);
-                    Console.WriteLine ("   Issued to:   {0}", x509.SubjectName);
-                    Console.WriteLine ("   Valid from:  {0}", x509.ValidFrom);
-                    Console.WriteLine ("   Valid until: {0}", x509.ValidUntil);
-
-                    if (!x509.IsCurrent)
-                        Console.WriteLine ("   *** WARNING: Certificate isn't current ***");
-                    if ((i > 0) && !isSelfSigned) {
-                        X509Certificate signer = sessionCertificates [i-1];
-                        bool isSigned = false;
-
-                        Console.WriteLine("Signature algorithm: " + CryptoHelper.HashAlgNameFromOid(x509.SignatureAlgorithm));
-                        try {
-                            if (signer.RSA != null) {
-                                isSigned = x509.VerifySignature (signer.RSA);
-                            } else if (signer.DSA != null) {
-                                isSigned = x509.VerifySignature (signer.DSA);
-                            } else {
-                                Console.WriteLine ("   *** WARNING: Couldn't not find who signed this certificate ***");
-                                isSigned = true; // skip next warning
-                            }
-
-                            if (!isSigned)
-                                Console.WriteLine ("   *** WARNING: Certificate signature is INVALID ***");
-                        }
-                        catch {
-                            failed = true;
-                        }
-                    }
-                    if (failed) {
-                        Console.WriteLine ("   *** ERROR: Couldn't decode certificate properly ***");
-                        Console.WriteLine ("   *** try 'man certmgr' for additional help or report to bugzilla.novell.com ***");
-                        break;
-                    }
-
-                    if (store.Certificates.Contains (x509)) {
-                        Console.WriteLine ("This certificate is already in the {0} store.", store.Name);
-                    } else {
-                        Console.Write ("Import this certificate into the {0} store (Y/N)?", store.Name);
-                        string answer = Console.ReadLine ().ToUpper ();
-                        if ((answer == "YES") || (answer == "Y")) {
-                            store.Import (x509);
-                            n++;
-                        } else {
-                            if (verbose) {
-                                Console.WriteLine ("Certificate not imported into store {0}.", 
-                                    store.Name);
-                            }
-                            break;
-                        }
-                    }
+                    ProcessSessionCertificate(sessionCertificates[i],prevCert,machine,verbose);
                 }
             }
 
             Console.WriteLine ();
-            if (n == 0) {
+            if (addedCertificatesCount == 0) {
                 Console.WriteLine ("No certificate were added to the stores.");
             } else {
                 Console.WriteLine ("{0} certificate{1} added to the stores.", 
-                    n, (n == 1) ? String.Empty : "s");
+                    addedCertificatesCount, (addedCertificatesCount == 1) ? String.Empty : "s");
             }
+        }
+
+        private static bool ProcessSessionCertificate(X509Certificate certificate, X509Certificate prevCertificate, 
+            bool machine, bool beVerbose)
+        {
+            bool isSelfSigned = false;
+            bool failed = false;
+            X509Store store = null;
+            try {
+                isSelfSigned = certificate.IsSelfSigned;
+            }
+            catch {
+                // sadly it's hard to interpret old certificates with MD2
+                // without manually changing the machine.config file
+                failed = true;
+            }
+
+            if (isSelfSigned) {
+                // this is a root
+                store = GetStoreFromName (X509Stores.Names.TrustedRoot, machine);
+            } else if (prevCertificate == null) {
+                // server certificate isn't (generally) an intermediate CA
+                store = GetStoreFromName (X509Stores.Names.OtherPeople, machine);
+            } else {
+                // all other certificates should be intermediate CA
+                store = GetStoreFromName (X509Stores.Names.IntermediateCA, machine);
+            }
+
+            Console.WriteLine ("{0}{1}X.509 Certificate v{2}",     
+                Environment.NewLine,
+                isSelfSigned ? "Self-signed " : String.Empty,
+                certificate.Version);
+            Console.WriteLine ("   Issued from: {0}", certificate.IssuerName);
+            Console.WriteLine ("   Issued to:   {0}", certificate.SubjectName);
+            Console.WriteLine ("   Valid from:  {0}", certificate.ValidFrom);
+            Console.WriteLine ("   Valid until: {0}", certificate.ValidUntil);
+
+            if (!certificate.IsCurrent)
+                Console.WriteLine ("   *** WARNING: Certificate isn't current ***");
+            if ((prevCertificate != null) && !isSelfSigned) {
+                X509Certificate signer = prevCertificate;
+                bool isSigned = false;
+
+                Console.WriteLine("Signature algorithm: " + CryptoHelper.HashAlgNameFromOid(certificate.SignatureAlgorithm));
+                try {
+                    if (signer.RSA != null) {
+                        isSigned = certificate.VerifySignature (signer.RSA);
+                    } else if (signer.DSA != null) {
+                        isSigned = certificate.VerifySignature (signer.DSA);
+                    } else {
+                        Console.WriteLine ("   *** WARNING: Couldn't not find who signed this certificate ***");
+                        isSigned = true; // skip next warning
+                    }
+
+                    if (!isSigned)
+                        Console.WriteLine ("   *** WARNING: Certificate signature is INVALID ***");
+                }
+                catch {
+                    failed = true;
+                }
+            }
+            if (failed) {
+                Console.WriteLine ("   *** ERROR: Couldn't decode certificate properly ***\n");
+                //Console.WriteLine ("   *** try 'man certmgr' for additional help or report to bugzilla.novell.com ***");
+                //throw new Exception("Certificate decoding failed");
+                return false;
+            }
+
+            if (store.Certificates.Contains (certificate)) {
+                Console.WriteLine ("This certificate is already in the {0} store.", store.Name);
+            } else {
+                Console.Write ("Import this certificate into the {0} store (Y/N)?", store.Name);
+                string answer = Console.ReadLine ().ToUpper ();
+                if ((answer == "YES") || (answer == "Y")) {
+                    store.Import (certificate);
+                    return true;
+                } else {
+                    if (beVerbose) {
+                        Console.WriteLine ("Certificate not imported into store {0}.", 
+                            store.Name);
+                    }
+                    //throw new Exception("");
+                }
+            }
+
+            return false;
         }
 
         static void ImportKey (ObjectType type, bool machine, string file, string password, bool verbose)
