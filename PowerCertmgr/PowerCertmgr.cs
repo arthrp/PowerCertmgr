@@ -421,9 +421,9 @@ namespace MonoSecurityTools
 
         static void List (ObjectType type, X509Store store, bool machine, bool verbose) 
         {
+            var stores = (store == null) ? DefaultCertificateStores : new List<X509Store>() { store };
             switch (type) {
             case ObjectType.Certificate:
-                var stores = (store == null) ? DefaultCertificateStores : new List<X509Store>() { store };
                 foreach (X509Store listedStore in stores)
                 {
                     foreach (X509Certificate x509 in listedStore.Certificates)
@@ -433,9 +433,12 @@ namespace MonoSecurityTools
                 }
                 break;
             case ObjectType.CRL:
-                foreach (X509Crl crl in store.Crls) 
+                foreach (X509Store listedStore in stores)
                 {
-                    DisplayCrl (crl, machine, verbose);
+                    foreach (X509Crl crl in store.Crls) 
+                    {
+                        DisplayCrl (crl, machine, verbose);
+                    }
                 }
                 break;
             default:
