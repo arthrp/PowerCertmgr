@@ -282,6 +282,9 @@ namespace MonoSecurityTools
 
         static void Add (ObjectType type, X509Store store, string file, string password, bool verbose) 
         {
+            if (String.IsNullOrEmpty(file))
+                throw new ArgumentException(String.Format("Path to {0} wasn't specified", type.ToString()));
+
             switch (type) {
             case ObjectType.Certificate:
                 X509CertificateCollection coll = LoadCertificates (file, password, verbose);
@@ -433,7 +436,8 @@ namespace MonoSecurityTools
                 }
                 break;
             case ObjectType.CRL:
-                foreach (X509Crl crl in store.Crls) {
+                foreach (X509Crl crl in store.Crls) 
+                {
                     DisplayCrl (crl, machine, verbose);
                 }
                 break;
@@ -453,7 +457,8 @@ namespace MonoSecurityTools
             SslClientStream ssl = new SslClientStream (ns, uri.Host, false, Mono.Security.Protocol.Tls.SecurityProtocolType.Default, null);
             //ssl.ServerCertValidationDelegate += new CertificateValidationCallback (CertificateValidation);
 
-            try {
+            try 
+            {
                 // we don't really want to write to the server (as we don't know
                 // the protocol it using) but we must send something to be sure the
                 // SSL handshake is done (so we receive the X.509 certificates).
@@ -462,7 +467,8 @@ namespace MonoSecurityTools
                 sw.Flush ();
                 socket.Poll (30000, SelectMode.SelectRead);
             }
-            finally {
+            finally 
+            {
                 socket.Close ();
             }
 
