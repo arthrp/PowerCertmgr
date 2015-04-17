@@ -282,9 +282,6 @@ namespace MonoSecurityTools
 
         static void Add (ObjectType type, X509Store store, string file, string password, bool verbose) 
         {
-            if (String.IsNullOrEmpty(file))
-                throw new ArgumentException(String.Format("Path to {0} wasn't specified", type.ToString()));
-
             switch (type) {
             case ObjectType.Certificate:
                 X509CertificateCollection coll = LoadCertificates (file, password, verbose);
@@ -705,7 +702,10 @@ namespace MonoSecurityTools
                 }
             }
 
-            string file = (currentArgArrIndex < args.Length) ? args[currentArgArrIndex] : null;
+
+            string file = null;
+            if(action != Action.List)
+                file = args.GetArgumentByIndex(currentArgArrIndex++, String.Format("path to {0}",objectType.ToString()));
 
             // now action!
             try {
