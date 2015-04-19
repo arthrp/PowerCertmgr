@@ -48,7 +48,7 @@ namespace MonoSecurityTools
             Console.WriteLine ();
             Console.WriteLine ("actions:");
             Console.WriteLine ("\t-add\t\tAdd a certificate, CRL or CTL to specified store");
-            Console.WriteLine ("\t-del\t\tRemove a certificate, CRL or CTL to specified store");
+            Console.WriteLine ("\t-del\t\tRemove a certificate, CRL or CTL from specified store");
             Console.WriteLine ("\t-put\t\tCopy a certificate, CRL or CTL from a store to a file");
             Console.WriteLine ("\t-list\t\tList certificates, CRL or CTL in the specified store.");
             Console.WriteLine ("\t-ssl\t\tDownload and add certificates from an SSL session");
