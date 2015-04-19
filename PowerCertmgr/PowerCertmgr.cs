@@ -480,14 +480,7 @@ namespace MonoSecurityTools
             }
             return (X509CertificateCollection) pi.GetValue (ssl, null);
         }
-
-        static bool CertificateValidation (SSCX.X509Certificate certificate, int[] certificateErrors)
-        {
-            // the main reason to download it is that it's not trusted
-            return true;
-            // OTOH we ask user confirmation before adding certificates into the stores
-        }
-
+            
         static void AddCertificatesFromSslSession (string host, bool machine, bool verbose) 
         {
             if (verbose) {
