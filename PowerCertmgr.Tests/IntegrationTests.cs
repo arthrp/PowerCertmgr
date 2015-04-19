@@ -68,6 +68,30 @@ namespace PowerCertmgr.Tests
                 Assert.True(sw.ToString().Contains("Invalid arguments: path to Certificate wasn't specified"));
             }
         }
+
+        [Test]
+        public void CallingDelWithoutMandatoryParamsPrintsError()
+        {
+            using (StringWriter sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+
+                PowerCertMgr.Main(new string[]{ "-del", "-c", "My" });
+                Assert.True(sw.ToString().Contains("Invalid arguments: path to Certificate wasn't specified"));
+            }
+        }
+
+        [Test]
+        public void CallingListWithoutMandatiryParamsPrintsError()
+        {
+            using (StringWriter sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+
+                PowerCertMgr.Main(new string[]{ "-list", "-c" });
+                Assert.True(sw.ToString().Contains("Usage:"));
+            }
+        }
     }
 }
 
