@@ -435,7 +435,7 @@ namespace MonoSecurityTools
             case ObjectType.CRL:
                 foreach (X509Store listedStore in stores)
                 {
-                    foreach (X509Crl crl in store.Crls) 
+                    foreach (X509Crl crl in listedStore.Crls) 
                     {
                         DisplayCrl (crl, machine, verbose);
                     }
