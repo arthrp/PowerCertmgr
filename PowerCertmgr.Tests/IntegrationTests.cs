@@ -6,7 +6,7 @@ using MonoSecurityTools;
 namespace PowerCertmgr.Tests
 {
     [TestFixture]
-    public class BaseTests
+    public class IntegrationTests
     {
         [Test]
         public void CalledWithZeroArgsShouldPrintUsage()
