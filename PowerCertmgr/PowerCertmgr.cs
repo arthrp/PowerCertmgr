@@ -89,8 +89,8 @@ namespace MonoSecurityTools
             case '-':
                 if (arg.Length < 2)
                     return null;
-                int n = ((arg [1] == '-') ? 2 : 1);
-                return arg.Substring (n).ToUpper ();
+                int startIndex = ((arg [1] == '-') ? 2 : 1);
+                return arg.Substring (startIndex).ToUpper ();
             default:
                 return arg;
             }
@@ -169,9 +169,9 @@ namespace MonoSecurityTools
             string pem = Encoding.ASCII.GetString (data);
             string header = String.Format ("-----BEGIN {0}-----", type);
             string footer = String.Format ("-----END {0}-----", type);
-            int start = pem.IndexOf (header) + header.Length;
-            int end = pem.IndexOf (footer, start);
-            string base64 = pem.Substring (start, (end - start));
+            int startIdx = pem.IndexOf (header) + header.Length;
+            int endIdx = pem.IndexOf (footer, startIdx);
+            string base64 = pem.Substring (startIdx, (endIdx - startIdx));
             return Convert.FromBase64String (base64);
         }
 
@@ -678,6 +678,7 @@ namespace MonoSecurityTools
             string storeName = null;
             if (action != Action.Ssl) {
                 if ((action == Action.None) || (objectType == ObjectType.None)) {
+                    Console.WriteLine("Error: Unknown action or object type");
                     PrintHelp ();
                     return;
                 }
