@@ -17,6 +17,12 @@ Currently it's the original code, fixed to run in standalone with minor fixes (e
 
 Should be compatible with Mono 3.10 and later. CI seems to use the latest stable Mono.
 
+### TODO
+
+* Improve code coverage with tests
+* Fixing most crashes due to incorrect/missing parameters
+* Rewrite help/man page to make it clear
+
 ### Backporting
 
 When I have time, I will try to import the improvements/fixes back to original distributed with Mono (if the maintainers accept, hehe).
