@@ -82,7 +82,7 @@ namespace PowerCertmgr.Tests
         }
 
         [Test]
-        public void CallingListWithoutMandatiryParamsPrintsError()
+        public void CallingListWithoutMandatoryParamsPrintsError()
         {
             using (StringWriter sw = new StringWriter())
             {
@@ -90,6 +90,42 @@ namespace PowerCertmgr.Tests
 
                 PowerCertMgr.Main(new string[]{ "-list", "-c" });
                 Assert.True(sw.ToString().Contains("Usage:"));
+            }
+        }
+
+        [Test]
+        public void PrintsUnsupportedWhenTryingToOperateWithCtl()
+        {
+            using (StringWriter sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+
+                PowerCertMgr.Main(new string[]{ "-list", "-ctl" });
+                Assert.True(sw.ToString().Contains("CTLs are not supported"));
+            }
+
+            using (StringWriter sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+
+                PowerCertMgr.Main(new string[]{ "-add", "-ctl" });
+                Assert.True(sw.ToString().Contains("CTLs are not supported"));
+            }
+
+            using (StringWriter sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+
+                PowerCertMgr.Main(new string[]{ "-del", "-ctl" });
+                Assert.True(sw.ToString().Contains("CTLs are not supported"));
+            }
+
+            using (StringWriter sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+
+                PowerCertMgr.Main(new string[]{ "-put", "-ctl" });
+                Assert.True(sw.ToString().Contains("CTLs are not supported"));
             }
         }
     }
