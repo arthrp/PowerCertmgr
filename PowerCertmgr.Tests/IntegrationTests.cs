@@ -80,18 +80,7 @@ namespace PowerCertmgr.Tests
                 Assert.True(sw.ToString().Contains("Invalid arguments: path to Certificate wasn't specified"));
             }
         }
-
-        [Test]
-        public void CallingListWithoutMandatoryParamsPrintsError()
-        {
-            using (StringWriter sw = new StringWriter())
-            {
-                Console.SetOut(sw);
-
-                PowerCertMgr.Main(new string[]{ "-list", "-c" });
-                Assert.True(sw.ToString().Contains("Usage:"));
-            }
-        }
+    
 
         [Test]
         public void PrintsUnsupportedWhenTryingToOperateWithCtl()
