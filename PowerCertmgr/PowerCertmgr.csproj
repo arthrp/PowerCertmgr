@@ -42,6 +42,7 @@
     <Compile Include="ObjectType.cs" />
     <Compile Include="StringArrayExtensions.cs" />
     <Compile Include="CryptoHelper.cs" />
+    <Compile Include="SslHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
