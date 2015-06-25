@@ -19,7 +19,7 @@ Should be compatible with Mono 3.10 and later. CI seems to use the latest stable
 
 ### TODO
 
-* Improve code coverage with tests
+* Improve code coverage with tests (goal is to cover all main scenarios)
 * Fixing most crashes due to incorrect/missing parameters
 * Rewrite help/man page to make it clear
 
